@@ -41,7 +41,7 @@ if (isset($_POST['login'])) {
     }
 
     // Check in patient table
-    $queryCustomer = "SELECT * FROM patiet WHERE email = '$email'";
+    $queryCustomer = "SELECT * FROM patient WHERE email = '$email'";
     $resultCustomer = mysqli_query($conn, $queryCustomer);
 
     if ($resultCustomer && mysqli_num_rows($resultCustomer) > 0) {

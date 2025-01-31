@@ -98,7 +98,7 @@ $result = mysqli_query($conn, $sql);
             background: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(210, 22, 22, 0.05);
         }
 
         .content-header {
@@ -127,23 +127,30 @@ $result = mysqli_query($conn, $sql);
             color: white;
         }
 
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: white;
-            text-decoration: none;
-            margin-right: 5px;
-        }
+      /* Action buttons container to place buttons on the same line */
+.action-buttons {
+    display: flex;  /* Align the buttons side by side */
+    gap: 10px;      /* Space between buttons */
+}
 
-        .edit-btn {
-            background: #2ecc71;
-        }
+/* Style the individual buttons */
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
 
-        .delete-btn {
-            background: #e74c3c;
-        }
+.edit-btn {
+    background: #2ecc71;  /* Green for Edit */
+}
+
+.delete-btn {
+    background: #e74c3c;  /* Red for Delete */
+}
+
 
         /* Modal Styles */
         #editModal {
@@ -230,42 +237,49 @@ $result = mysqli_query($conn, $sql);
                     <h2>Accepted Doctors List</h2>
                 </div>
                 <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Specialization</th>
-                            <th>Experience</th>
-                            <th>Bio</th>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars($row['id']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['specialization']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['experience']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['bio']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                    <td>
-                                        <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($row)); ?>)" class="action-btn edit-btn">Edit</button>
-                                        <a href="?delete_id=<?php echo $row['id']; ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
-                        } else {
-                            echo "<tr><td colspan='7'>No doctors found</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Experience</th>
+            <th>Time</th> <!-- New column for time -->
+            <th>City</th> <!-- New column for city -->
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            ?>
+            <tr>
+                <td><?php echo htmlspecialchars($row['id']); ?></td>
+                <td><?php echo htmlspecialchars($row['name']); ?></td>
+                <td><?php echo htmlspecialchars($row['specialization']); ?></td>
+                <td><?php echo htmlspecialchars($row['experience']); ?></td>
+                <td><?php echo htmlspecialchars($row['time']); ?></td> <!-- Displaying time -->
+                <td><?php echo htmlspecialchars($row['city']); ?></td> <!-- Displaying city -->
+                <td><?php echo htmlspecialchars($row['email']); ?></td>
+                <td>
+                    <!-- Action Buttons inside a container div -->
+                    <div class="action-buttons">
+                        <button onclick="openEditModal(<?php echo htmlspecialchars(json_encode($row)); ?>)" class="action-btn edit-btn">Edit</button>
+                        <a href="?delete_id=<?php echo $row['id']; ?>" class="action-btn delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            <?php
+        }
+    } else {
+        echo "<tr><td colspan='8'>No doctors found</td></tr>";
+    }
+    ?>
+</tbody>
+
+</table>
+
             </div>
         </div>
     </div>

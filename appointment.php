@@ -91,6 +91,9 @@ $conn->close();
             margin-top: 5px;
             display: block;
         }
+        .appointment{
+            padding-top: 20px;
+        }
     </style>
 </head>
 

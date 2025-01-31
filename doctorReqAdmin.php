@@ -43,12 +43,15 @@ $result = mysqli_query($conn, $sql);
     <title>Doctor Requests</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
+         * {
             margin: 0;
             padding: 0;
             font-family: "Poppins", sans-serif;
         }
-
+        body{
+            width: 100%;
+            overflow: hidden;
+        }
         .main {
             display: flex;
             min-height: 100vh;
@@ -56,7 +59,7 @@ $result = mysqli_query($conn, $sql);
 
         .left {
             background-color: #1A76D1;
-            width: 250px;
+            width: 25%;
             padding: 20px;
         }
 
@@ -86,7 +89,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .right {
-            flex: 1;
+            width: 75%;
             padding: 20px;
             background: #f0f2f5;
         }
@@ -96,6 +99,7 @@ $result = mysqli_query($conn, $sql);
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            max-height: 600px;
         }
 
         .content-header {
@@ -109,7 +113,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .table-container {
-            overflow-x: auto;
+            overflow-x: auto; /* Horizontal scroll for wide tables */
         }
 
         table {
@@ -198,7 +202,7 @@ $result = mysqli_query($conn, $sql);
     </style>
 </head>
 <body>
-    <div class="main">
+<div class="main">
         <div class="left">
             <div class="logo">
                 <h1>CA<span>RE</span></h1>
@@ -224,9 +228,10 @@ $result = mysqli_query($conn, $sql);
                                 <th>Name</th>
                                 <th>Specialization</th>
                                 <th>Experience</th>
-                                <th>Bio</th>
                                 <th>Picture</th>
                                 <th>Email</th>
+                                <th>Time</th> <!-- New column -->
+                                <th>City</th> <!-- New column -->
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -241,12 +246,13 @@ $result = mysqli_query($conn, $sql);
                                         <td><?php echo htmlspecialchars($row['name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['specialization']); ?></td>
                                         <td><?php echo htmlspecialchars($row['experience']); ?></td>
-                                        <td><?php echo htmlspecialchars(substr($row['bio'], 0, 50)) . '...'; ?></td>
                                         <td>
                                             <img src="doctorImage/<?php echo htmlspecialchars($row['picture']); ?>" 
                                                  alt="Doctor">
                                         </td>
                                         <td><?php echo htmlspecialchars($row['email']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['time']); ?></td> <!-- Display Time -->
+                                        <td><?php echo htmlspecialchars($row['city']); ?></td> <!-- Display City -->
                                         <td>
                                             <?php if (isset($row['status']) && $row['status'] !== 'accepted') { ?>
                                                 <a href="?accept_id=<?php echo $row['id']; ?>" 
@@ -264,7 +270,7 @@ $result = mysqli_query($conn, $sql);
                                     <?php
                                 }
                             } else {
-                                echo "<tr><td colspan='9' style='text-align: center;'>No doctor registration requests found</td></tr>";
+                                echo "<tr><td colspan='11' style='text-align: center;'>No doctor registration requests found</td></tr>";
                             }
                             ?>
                         </tbody>

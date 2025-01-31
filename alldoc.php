@@ -1,3 +1,11 @@
+<?php
+    // Database connection
+    $conn = mysqli_connect("localhost", "root", "", "care");
+
+    // Basic query to fetch all accepted doctors
+    $query = "SELECT * FROM doctor WHERE status = 'accepted'";
+    $result = mysqli_query($conn, $query);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,24 +60,41 @@
         }
 
         .doctor-main {
-            width: 100%;
-            height: 60vh;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
             gap: 20px;
+            margin: 20px 0px;
         }
 
         .d-card1 {
-
-            width: 20%;
-            height: 85%;
-            border-radius: 6px;
-            background-color: rgba(128, 128, 128, 0.062);
-
-            /* box-shadow: 14px 14px 20px #cbced1 , -14px -14px 20px #ffffff; */
-
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 15px;
         }
+
+        .d-card1 img {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+        }
+
+        .d-card1 h3 {
+            margin: 10px 0;
+        }
+
+        .d-card1 a {
+            display: inline-block;
+            text-decoration: none;
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
 
         .d-card1:hover {
 
@@ -84,7 +109,6 @@
             display: flex;
             align-items: center;
             justify-self: center;
-            background-color: #eaefff;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
@@ -108,15 +132,15 @@
         }
 
         .c-text h1 {
+            margin-top: 10px;
             font-size: 1.5vw;
             font-weight: 400;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
         }
 
         .c-text h6 {
-            margin-top: -1px;
-            font-size: 1vw;
-            font-weight: 500;
+            font-size: 1.2vw;
+            font-weight: 400;
         }
 
         .line {
@@ -411,8 +435,7 @@
                 <option value="karachi">Karachi</option>
                 <option value="lahore">Lahore</option>
                 <option value="islamabad">Islamabad</option>
-                <option value="peshawar">Peshawar</option>
-                <option value="multan">Multan</option>
+
             </select>
         </div>
     </div>
@@ -421,183 +444,37 @@
     <div class="line">
         <div class="line1"></div>
     </div>
+
+
     <div class="doctor-main">
- <!-- Cardiologists -->
-<a href="confirmApp.php?doctor=Dr. Ali Raza&specialty=Cardiology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc1.png" alt="Doctor 1">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Ali Raza</h1>
-        <h6>Cardiologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Ayesha Malik&specialty=Cardiology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc2.png" alt="Doctor 2">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Ayesha Malik</h1>
-        <h6>Cardiologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Hammad Hussain&specialty=Cardiology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc3.png" alt="Doctor 3">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Hammad Hussain</h1>
-        <h6>Cardiologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Zafar Ahmed&specialty=Cardiology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc4.png" alt="Doctor 4">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Zafar Ahmed</h1>
-        <h6>Cardiologist</h6>
-    </div>
-</a>
-
-</div>
-
-<div class="doctor-main">
-  <!-- Neurologists -->
-<a href="confirmApp.php?doctor=Dr. Sara Khan&specialty=Neurology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc5.png" alt="Doctor 5">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Sara Khan</h1>
-        <h6>Neurologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Bilal Ahmed&specialty=Neurology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc6.png" alt="Doctor 6">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Bilal Ahmed</h1>
-        <h6>Neurologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Usman Tariq&specialty=Neurology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc7.png" alt="Doctor 7">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Usman Tariq</h1>
-        <h6>Neurologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Usman Siddiqui&specialty=Neurology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc8.png" alt="Doctor 8">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Usman Siddiqui</h1>
-        <h6>Neurologist</h6>
-    </div>
-</a>
-
-</div>
-
-<div class="doctor-main">
-    <!-- Dermatologists -->
-<a href="confirmApp.php?doctor=Dr. Fatima Javed&specialty=Dermatology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc9.png" alt="Doctor 9">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Fatima Javed</h1>
-        <h6>Dermatologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Imran Shah&specialty=Dermatology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc10.png" alt="Doctor 10">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Imran Shah</h1>
-        <h6>Dermatologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Nadia Zafar&specialty=Dermatology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc11.png" alt="Doctor 11">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Nadia Zafar</h1>
-        <h6>Dermatologist</h6>
-    </div>
-</a>
-
-<a href="confirmApp.php?doctor=Dr. Waqas Hussain&specialty=Dermatology" class="d-card1">
-    <div class="c-img">
-        <img src="img/doc12.png" alt="Doctor 12">
-    </div>
-    <div class="c-text">
-        <p>Available</p>
-        <h1>Dr. Waqas Hussain</h1>
-        <h6>Dermatologist</h6>
-    </div>
-</a>
-
-</div>
-
-<div class="doctor-main">
-<?php
-// Database connection
-$conn = mysqli_connect("localhost", "root", "", "care");
-
-// Only fetch doctors whose status is 'accepted'
-$query = "SELECT * FROM doctor WHERE status = 'accepted'";
-$result = mysqli_query($conn, $query);
-
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        ?>
-        <a href="confirmApp.php?doctor=<?php echo urlencode($row['name']); ?>&specialty=<?php echo urlencode($row['specialization']); ?>" class="d-card1">
-            <div class="c-img">
-                <img src="doctorImage/<?php echo htmlspecialchars($row['picture']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
-            </div>
-            <div class="c-text">
-                <p>Available</p>
-                <h1><?php echo htmlspecialchars($row['name']); ?></h1>
-                <h6><?php echo htmlspecialchars($row['specialization']); ?></h6>
-            </div>
-        </a>
-        <?php
+    <?php
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Fetching doctor details including timings
+            $doctor_name = htmlspecialchars($row['name']);
+            $doctor_specialization = htmlspecialchars($row['specialization']);
+            $doctor_picture = htmlspecialchars($row['picture']);
+            $doctor_city = htmlspecialchars($row['city']);
+            $doctor_timing = htmlspecialchars($row['time']); // Add this line to fetch doctor's timing
+    ?>
+            <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_specialization); ?>" class="d-card1">
+                <div class="c-img">
+                    <img src="doctorImage/<?php echo $doctor_picture; ?>" alt="<?php echo $doctor_name; ?>">
+                </div>
+                <div class="c-text">
+                    <h1><?php echo $doctor_name; ?></h1>
+                    <h6><?php echo $doctor_specialization; ?></h6>
+                    <p>Timings: <?php echo $doctor_timing; ?></p> <!-- Added the doctor's timing here -->
+                    <h6><?php echo $doctor_city; ?></h6>
+                </div>
+            </a>
+    <?php
+        }
+    } else {
+        echo "<p>No doctors available at the moment.</p>";
     }
-} else {
-}
-?>
-    </div>
-
-
-
-
-
+    ?>
+</div>
 
     <!-- Footer Area -->
     <footer id="footer" class="footer">
@@ -739,20 +616,20 @@ if (mysqli_num_rows($result) > 0) {
             if (city === 'karachi') {
                 window.location.href = 'karachi.php';
             }
-            else if (city ==='multan') {
-                window.location.href ='multan.php';
+            else if (city === 'multan') {
+                window.location.href = 'multan.php';
             }
-            else if (city ==='lahore') {
-                window.location.href ='lahore.php';
+            else if (city === 'lahore') {
+                window.location.href = 'lahore.php';
             }
-            else if (city ==='islamabad') {
-                window.location.href ='islamabad.php';
+            else if (city === 'islamabad') {
+                window.location.href = 'islamabad.php';
             }
-            else if (city ==='peshawar') {
-                window.location.href ='peshawar.php';
+            else if (city === 'peshawar') {
+                window.location.href = 'peshawar.php';
             }
         }
-        
+
     </script>
 </body>
 

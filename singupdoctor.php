@@ -40,7 +40,7 @@ ob_start();
 
         // Move file to "images/" folder
         if (move_uploaded_file($temp_name, "doctorImage/" . $filename)) {
-            // Insert data into `doctor` table
+            // Insert data into doctor table
             $sql = "INSERT INTO doctor (name, specialization, experience, bio, email, password, picture) 
                     VALUES ('$name', '$specialization', '$experience', '$bio', '$email', '$password', '$filename')";
 
@@ -126,7 +126,8 @@ ob_end_flush();
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 160vh;
+            height: 180vh;
+
         }
 
 
@@ -206,6 +207,12 @@ select {
         }
         
         @media (max-width: 600px) {
+            .signup{
+                height: 200vh;
+                width:90%;
+                margin: 0px 20px;
+               
+            }
             .signup-form {
                 padding: 15px;
             }
@@ -330,6 +337,14 @@ select {
         <label for="experience">Experience</label>
         <input type="text" id="experience" name="experience" placeholder="Enter your years of experience" required>
     </div>
+    <div class="form-group">
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" placeholder="Enter your City Name" required>
+    </div>
+    <div class="form-group">
+    <label for="time">Availablity</label>
+    <input type="text" id="time" name="time" placeholder="For example 5 PM/AM to 6 PM/AM" required>
+</div>
 
     <div class="form-group">
         <label for="bio">Short Bio</label>
@@ -549,4 +564,4 @@ select {
                 <!-- ============================php==================================== -->
 </body>
 
-</html>
+</html> 

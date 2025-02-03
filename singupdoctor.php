@@ -1,66 +1,83 @@
 <?php
 if (isset($_POST['submit'])) {
-ob_start();
-    // Form inputs
-    $name = $_POST['name'];
-    $specialization = $_POST['specialization'];
-    $experience = $_POST['experience'];
-    $bio = $_POST['bio'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $picture = $_FILES['picture']['name'];
-
+    ob_start();
+    
     // Database connection
     $conn = mysqli_connect("localhost", "root", "", "care");
-
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Create table if it doesn't exist
-    $createTableSQL = "CREATE TABLE IF NOT EXISTS doctor (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        specialization VARCHAR(255) NOT NULL,
-        experience VARCHAR(100) NOT NULL,
-        bio TEXT NOT NULL,
-        email VARCHAR(100) NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        picture VARCHAR(255) NOT NULL
-    )";
+    // Form inputs (with security measures)
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $specialization = mysqli_real_escape_string($conn, $_POST['specialization']);
+    $experience = mysqli_real_escape_string($conn, $_POST['experience']);
+    $city = mysqli_real_escape_string($conn, $_POST['city']);
+    $time = mysqli_real_escape_string($conn, $_POST['time']);
+    $bio = mysqli_real_escape_string($conn, $_POST['bio']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = mysqli_real_escape_string($conn, $_POST['password']);
+    
+    // Hashing the password before storing
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    
+    // Handling file upload
+    $picture = $_FILES['picture']['name'];
+    $temp_name = $_FILES['picture']['tmp_name'];
+    $upload_dir = "doctorImage/";
+    
+    // Allow only image files
+    $allowed_types = ['jpg', 'jpeg', 'png'];
+    $file_ext = strtolower(pathinfo($picture, PATHINFO_EXTENSION));
 
-    if (!mysqli_query($conn, $createTableSQL)) {
-        die("Error creating table: " . mysqli_error($conn));
+    if (!in_array($file_ext, $allowed_types)) {
+        die("Invalid file type. Only JPG, JPEG, and PNG files are allowed.");
     }
 
-    // File upload handling
-    if (isset($_FILES['picture'])) {
-        $filename = $_FILES['picture']['name'];
-        $temp_name = $_FILES['picture']['tmp_name'];
+    // Move file to directory
+    if (move_uploaded_file($temp_name, $upload_dir . $picture)) {
+        
+        // Create table if it doesn't exist
+        $createTableSQL = "CREATE TABLE IF NOT EXISTS doctor (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            specialization VARCHAR(255) NOT NULL,
+            experience VARCHAR(100) NOT NULL,
+            city VARCHAR(100) NOT NULL,
+            time VARCHAR(100) NOT NULL,
+            bio TEXT NOT NULL,
+            email VARCHAR(100) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            picture VARCHAR(255) NOT NULL
+        )";
 
-        // Move file to "images/" folder
-        if (move_uploaded_file($temp_name, "doctorImage/" . $filename)) {
-            // Insert data into doctor table
-            $sql = "INSERT INTO doctor (name, specialization, experience, bio, email, password, picture) 
-                    VALUES ('$name', '$specialization', '$experience', '$bio', '$email', '$password', '$filename')";
-
-            if (mysqli_query($conn, $sql)) {
-                echo"Doctor successfully registered";
-            } else {
-                echo "<h2>Error registering doctor: " . mysqli_error($conn) . "</h2>";
-            }
+        if (!mysqli_query($conn, $createTableSQL)) {
+            die("Error creating table: " . mysqli_error($conn));
         }
+
+        // Insert data into doctor table
+        $sql = "INSERT INTO doctor (name, specialization, experience, city, time, bio, email, password, picture) 
+                VALUES ('$name', '$specialization', '$experience', '$city', '$time', '$bio', '$email', '$hashed_password', '$picture')";
+
+        if (mysqli_query($conn, $sql)) {
+            echo "Doctor successfully registered";
+        } else {
+            echo "<h2>Error registering doctor: " . mysqli_error($conn) . "</h2>";
+        }
+    } else {
+        die("Error uploading the picture.");
     }
 
     // Close the database connection
-    // mysqli_close($conn);
+    mysqli_close($conn);
 
     // Redirect
     header("Location: doctorRequest.php");
     exit;
-ob_end_flush();
+    ob_end_flush();
 }
 ?>
+
     <!-- -------------------------php------------------------------- -->
 
 <!DOCTYPE html>
@@ -304,14 +321,11 @@ select {
                             </div>
                             <!--/ End Main Menu -->
                         </div>
-                        <div class="col-lg-2 col-12"
-                            style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
-                            <input style="border-radius: 30px; padding-left: 20px;  font-size: 12px; " type="search"
-                                name="" id="" placeholder="Search">
-                            <button style="background-color: transparent; border: none;">
-                                <i class="ri-search-line" style="font-size: 1.7vw; cursor: pointer;"></i>
-                            </button>
-                        </div>
+                        <div class="col-lg-2 col-12">
+								<div class="get-quote">
+									<a href="appointment.php" class="btn">Book Appointment</a>
+								</div>
+							</div>
                     </div>
                 </div>
             </div>

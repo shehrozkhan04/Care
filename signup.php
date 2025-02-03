@@ -260,14 +260,11 @@
                             </div>
                             <!--/ End Main Menu -->
                         </div>
-                        <div class="col-lg-2 col-12"
-                            style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
-                            <input style="border-radius: 30px; padding-left: 20px;  font-size: 12px; " type="search"
-                                name="" id="" placeholder="Search">
-                            <button style="background-color: transparent; border: none;">
-                                <i class="ri-search-line" style="font-size: 1.7vw; cursor: pointer;"></i>
-                            </button>
-                        </div>
+                        <div class="col-lg-2 col-12">
+								<div class="get-quote">
+									<a href="appointment.php" class="btn">Book Appointment</a>
+								</div>
+							</div>
                     </div>
                 </div>
             </div>

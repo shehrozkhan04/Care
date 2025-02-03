@@ -1,10 +1,20 @@
 <?php
-    // Database connection
-    $conn = mysqli_connect("localhost", "root", "", "care");
+// Database connection
+$conn = mysqli_connect("localhost", "root", "", "care");
 
-    // Basic query to fetch all accepted doctors
-    $query = "SELECT * FROM doctor WHERE status = 'accepted'";
-    $result = mysqli_query($conn, $query);
+// Search functionality for specialization
+$searchQuery = '';
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = mysqli_real_escape_string($conn, $_GET['search']);
+    $searchQuery = "WHERE status = 'accepted' AND specialization LIKE '%$search%'";
+} else {
+    $searchQuery = "WHERE status = 'accepted'"; // Default query if no search term is entered
+}
+
+
+// Basic query to fetch all accepted doctors with specialization filter
+$query = "SELECT * FROM doctor $searchQuery";
+$result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -252,11 +262,11 @@
             }
 
             /* .city select {
-                width: 100%;
-                outline: none;
-                height: 20px;
-                border: 1px solid #000;
-            } */
+                    width: 100%;
+                    outline: none;
+                    height: 20px;
+                    border: 1px solid #000;
+                } */
 
             .city h1 {
                 font-size: 15px;
@@ -335,18 +345,18 @@
 
     <!-- Preloader -->
     <!-- <div class="preloader">
-        <div class="loader">
-            <div class="loader-outter"></div>
-            <div class="loader-inner"></div>
+            <div class="loader">
+                <div class="loader-outter"></div>
+                <div class="loader-inner"></div>
 
-            <div class="indicator">
-                <svg width="16px" height="12px">
-                    <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                    <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
-                </svg>
+                <div class="indicator">
+                    <svg width="16px" height="12px">
+                        <polyline id="back" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                        <polyline id="front" points="1 6 4 6 6 11 10 1 12 6 15 6"></polyline>
+                    </svg>
+                </div>
             </div>
-        </div>
-    </div> -->
+        </div> -->
     <!-- End Preloader -->
 
     <!-- Header Area -->
@@ -411,13 +421,21 @@
                             <!--/ End Main Menu -->
                         </div>
                         <div class="col-lg-2 col-12"
-                            style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
-                            <input style="border-radius: 30px; padding-left: 20px;  font-size: 12px; " type="search"
-                                name="" id="" placeholder="Search">
-                            <button style="background-color: transparent; border: none;">
-                                <i class="ri-search-line" style="font-size: 1.7vw; cursor: pointer;"></i>
-                            </button>
+                            style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                            <!-- Search input field -->
+                            <form method="GET" action="" style="display: flex; align-items: center; width: 100%;">
+                                <input
+                                    style="border-radius: 30px; padding-left: 20px; font-size: 12px; flex-grow: 1; height: 40px;"
+                                    type="search" name="search" id="search" placeholder="Search.."
+                                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                                <button
+                                    style="background-color: transparent; border: none; padding: 0; margin-left: 10px; cursor: pointer;">
+                                    <i class="ri-search-line" style="font-size: 1.7vw;"></i>
+                                </button>
+                            </form>
                         </div>
+
+
                     </div>
                 </div>
             </div>
@@ -435,7 +453,6 @@
                 <option value="karachi">Karachi</option>
                 <option value="lahore">Lahore</option>
                 <option value="islamabad">Islamabad</option>
-
             </select>
         </div>
     </div>
@@ -446,36 +463,37 @@
     </div>
 
 
-    <div class="doctor-main">
-    <?php
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            // Fetching doctor details including timings
-            $doctor_name = htmlspecialchars($row['name']);
-            $doctor_specialization = htmlspecialchars($row['specialization']);
-            $doctor_picture = htmlspecialchars($row['picture']);
-            $doctor_city = htmlspecialchars($row['city']);
-            $doctor_timing = htmlspecialchars($row['time']); // Add this line to fetch doctor's timing
-    ?>
-            <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_specialization); ?>" class="d-card1">
-                <div class="c-img">
-                    <img src="doctorImage/<?php echo $doctor_picture; ?>" alt="<?php echo $doctor_name; ?>">
-                </div>
-                <div class="c-text">
-                    <h1><?php echo $doctor_name; ?></h1>
-                    <h6><?php echo $doctor_specialization; ?></h6>
-                    <p>Timings: <?php echo $doctor_timing; ?></p> <!-- Added the doctor's timing here -->
-                    <h6><?php echo $doctor_city; ?></h6>
-                </div>
-            </a>
-    <?php
-        }
-    } else {
-        echo "<p>No doctors available at the moment.</p>";
-    }
-    ?>
-</div>
 
+    <div class="doctor-main">
+        <?php
+        if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                // Fetching doctor details including timings
+                $doctor_name = htmlspecialchars($row['name']);
+                $doctor_specialization = htmlspecialchars($row['specialization']);
+                $doctor_picture = htmlspecialchars($row['picture']);
+                $doctor_city = htmlspecialchars($row['city']);
+                $doctor_timing = htmlspecialchars($row['time']);
+                ?>
+                <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_specialization); ?>"
+                    class="d-card1">
+                    <div class="c-img">
+                        <img src="doctorImage/<?php echo $doctor_picture; ?>" alt="<?php echo $doctor_name; ?>">
+                    </div>
+                    <div class="c-text">
+                        <h1><?php echo $doctor_name; ?></h1>
+                        <h6><?php echo $doctor_specialization; ?></h6>
+                        <p>Timings: <?php echo $doctor_timing; ?></p>
+                        <h6><?php echo $doctor_city; ?></h6>
+                    </div>
+                </a>
+                <?php
+            }
+        } else {
+            echo "<p>No doctors available at the moment.</p>";
+        }
+        ?>
+    </div>
     <!-- Footer Area -->
     <footer id="footer" class="footer">
         <!-- Footer Top -->

@@ -71,7 +71,7 @@ $requestCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count
         .right {
             flex: 1;
             padding: 20px;
-            margin-left: 250px;
+            margin-left: 270px;
             background: #f0f2f5;
         }
 

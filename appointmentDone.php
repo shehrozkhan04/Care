@@ -51,8 +51,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+ }
+ .head{
+    width: 100%;
+    text-align: center;
+    padding-bottom: 20px;
+}
+@media (max-width: 480px) {
+   .main{
+    height: 60%;
+   }
+   .head h1{
+    font-size: 25px;
+   }
+}
 
-        }
     </style>
 </head>
 
@@ -148,9 +162,14 @@
     </header>
     <!-- End Header Area -->
     <div class="main">
-        <h1>
+       <div class="head">
+       <h1>
             Your Appointment Has Submitted...
         </h1>
+       </div>
+       <div class="btn">
+        <a href="index.php">Go To HomePage</a>
+       </div>
     </div>
 
 					<!-- Footer Area -->

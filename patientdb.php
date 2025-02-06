@@ -40,120 +40,142 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CARE - Patient List</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Basic CSS for styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+      * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    flex-direction: column;
+}
+
+.left {
+    background-color: #1A76D1;
+    width: 17%;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
+
+.logo h1 {
+    color: white;
+    font-size: 35px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+.logo span {
+            color: black;
         }
 
-        body {
-            display: flex;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: flex-start;
-            background-color: #f5f5f5;
-        }
+.menu-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
 
-        .sidebar {
-            width: 250px;
-            background-color: #2196F3;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-        }
+.menu-item a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+}
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 40px;
-        }
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
 
-        .menu-item {
-            padding: 10px 0;
-            cursor: pointer;
-        }
+.right {
+    flex: 1;
+    width: 83%;
+    padding: 20px;
+    margin-left: 17%;
+    background: #f0f2f5;
+    overflow-x: auto;
+}
 
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
+.content-area {
+    background: white;
+    border-radius: 10px;
+    width: 80%;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
 
-        .content-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+}
 
-        .content-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+th {
+    background-color: #1A76D1;
+    color: white;
+}
 
-        th {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
 
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
+.edit-btn {
+    background: #2ecc71;
+}
 
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            margin: 0 4px;
-        }
+.delete-btn {
+    background: #e74c3c;
+}
 
-        .edit-btn {
-            background-color: #4CAF50;
-        }
-
-        .delete-btn {
-            background-color: #f44336;
-            text-decoration: none;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
         /* Modal Styles */
         #editModal {
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
         }
 
         .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
             width: 500px;
             max-width: 90%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .modal-content h3 {
@@ -166,78 +188,182 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .form-group label {
             display: block;
-            font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 4px;
+            padding: 8px;
             border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
         .button-group {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
+            gap: 10px;
             margin-top: 20px;
         }
 
         .modal-btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
 
-        .cancel-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
         .save-btn {
-            background-color: #4CAF50;
+            background: #1A76D1;
             color: white;
         }
 
-        /* Close the modal when clicking outside */
-        #editModal.active {
-            display: flex;
+        .cancel-btn {
+            background: #ddd;
         }
 
-        @media screen and (max-width: 768px) {
-            .modal-content {
-                width: 90%;
-                max-width: 90%;
-            }
-        }
+@media (max-width: 1024px) {
+    .left {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+
+    .right {
+        margin-left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .logo h1 {
+        font-size: 28px;
+    }
+
+    .menu-item a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .left {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .menu-item {
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .logo h1 {
+        font-size: 26px;
+    }
+
+    .menu-item a {
+        font-size: 14px;
+    }
+
+    .right {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .content-area {
+        padding: 15px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 22px;
+    }
+
+    .menu-item a {
+        font-size: 12px;
+    }
+
+    .action-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .content-area {
+        padding: 10px;
+    }
+}
+
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">CARE</div>
-        <div class="menu-item">Patient Requests</div>
-        <div class="menu-item">Accepted Patients</div>
-    </div>
-
-    <div class="main-content">
-        <div class="content-card">
-            <h1 class="content-title">Accepted Patients List</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
+    <div class="main">
+    <div class="main">
+        <div class="left">
+            <div class="logo">
+                <h1>CA<span>RE</span></h1>
+            </div>
+            <div class="menu-item">
+                <a href="admin.php">Dashboard</a>
+            </div>
+            <div class="menu-item">
+                <a href="doctorReqAdmin.php">Doctor Requests</a>
+            </div>
+            <div class="menu-item">
+                <a href="DoctorDB.php">Doctors</a>
+            </div>
+            <div class="menu-item">
+                <a href="patientdb.php">Patients</a>
+            </div>
+            <div class="menu-item">
+                <a href="appointmentdb.php">Appointments</a>
+            </div>
+        </div>
+        <div class="right">
+            <div class="content-area">
+                <div class="content-header">
+                    <h2>Patients List</h2>
+                </div>
+                <table>
+    <thead>
+        <tr>
+        <th>ID</th>
                         <th>Name</th>
                         <th>Age</th>
                         <th>Gender</th>
                         <th>Medical History</th>
                         <th>Email</th>
                         <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
+        </tr>
+    </thead>
+    <tbody>
+    <?php
                     // Fetching patients data from the database
                     $sql = "SELECT * FROM patient";  // Replace 'patients' with your table name
                     $result = $conn->query($sql);
@@ -253,8 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <td>" . $row["medical_history"] . "</td>
                                     <td>" . $row["email"] . "</td>
                                     <td>
-                                        <div class='action-buttons'>
-                                            <button onclick=\"openEditModal(" . htmlspecialchars(json_encode($row)) . ")\" class='action-btn edit-btn'>Edit</button>
+                                        <div class='action-buttons'> 
                                             <a href='?delete_id=" . $row['id'] . "' class='action-btn delete-btn' onclick='return confirm(\"Are you sure?\")'>Delete</a>
                                         </div>
                                     </td>
@@ -267,13 +392,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Close the connection
                     $conn->close();
                     ?>
-                </tbody>
-            </table>
+</tbody>
+
+</table>
+
+            </div>
         </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal">
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
         <div class="modal-content">
             <h3>Edit Patient Details</h3>
             <form id="editForm" method="POST">
@@ -299,7 +427,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="email" name="email" id="patientEmail">
                 </div>
                 <div class="button-group">
-                    <button type="button" class="modal-btn cancel-btn" onclick="closeModal()">Close</button>
+                    <button type="button" class="modal-btn cancel-btn" onclick="closeEditModal()">Cancel</button>
                     <button type="submit" class="modal-btn save-btn">Save Changes</button>
                 </div>
             </form>
@@ -308,29 +436,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         function openEditModal(patient) {
-            // Show the modal
-            document.getElementById('editModal').classList.add('active');
-            
-            // Fill the form with the patient data
-            document.getElementById('patientId').value = patient.id;
-            document.getElementById('patientName').value = patient.name;
-            document.getElementById('patientAge').value = patient.age;
-            document.getElementById('patientGender').value = patient.gender;
-            document.getElementById('patientMedicalHistory').value = patient.medical_history;
-            document.getElementById('patientEmail').value = patient.email;
+            document.getElementById("patientId").value = patient.id;
+            document.getElementById("patientName").value = patient.name;
+            document.getElementById("patientAge").value = patient.age;
+            document.getElementById("patientGender").value = patient.gender;
+            document.getElementById("patientMedicalHistory").value = patient.medical_history;
+            document.getElementById("patientEmail").value = patient.email;
+            document.getElementById("editModal").classList.add("active");
         }
 
-        function closeModal() {
-            // Close the modal
-            document.getElementById('editModal').classList.remove('active');
+        function closeEditModal() {
+            document.getElementById("editModal").classList.remove("active");
         }
-
-        // Close modal when clicking outside
-        document.getElementById('editModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeModal();
-            }
-        });
     </script>
 </body>
 </html>

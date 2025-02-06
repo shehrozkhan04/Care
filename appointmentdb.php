@@ -1,358 +1,232 @@
 <?php
+// Include the database configuration file
 $conn = mysqli_connect("localhost", "root", "", "care");
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
-// SQL query to fetch appointments
-$sql = "SELECT * FROM appointments ORDER BY date ASC";
-$result = $conn->query($sql);
+// Handle the delete logic (if a delete request is made)
+if (isset($_GET['delete_id'])) {
+    $deleteId = $_GET['delete_id'];
 
-if ($result->num_rows > 0) {
-    // Output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "<div class='appointment-item'>";
-        echo "<p><strong>Name:</strong> " . $row["name"] . "</p>";
-        echo "<p><strong>Email:</strong> " . $row["email"] . "</p>";
-        echo "<p><strong>Phone:</strong> " . $row["phone"] . "</p>";
-        echo "<p><strong>Department:</strong> " . $row["department"] . "</p>";
-        echo "<p><strong>Doctor:</strong> " . $row["doctor"] . "</p>";
-        echo "<p><strong>Date:</strong> " . $row["date"] . "</p>";
-        echo "<p><strong>Message:</strong> " . $row["message"] . "</p>";
-        echo "<hr>";  // Line to separate each appointment
-        echo "</div>";
+    // SQL to delete the appointment record from the database
+    $deleteQuery = "DELETE FROM appointments WHERE id = $deleteId";
+
+    if (mysqli_query($conn, $deleteQuery)) {
+        header("Location: " . $_SERVER['PHP_SELF']); // Refresh page after deletion
+        exit(); // Exit to avoid further code execution
+    } else {
+        echo "Error deleting record: " . mysqli_error($conn);
     }
-} else {
-    echo "<p>No appointments found.</p>";
 }
-
-$conn->close();
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CARE - Appointments</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARE - Appointments List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f5f5f5;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #2196F3;
-            color: white;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 40px;
-        }
-
-        .menu-item {
-            padding: 10px 0;
-            cursor: pointer;
-            color: white;
+            font-family: "Poppins", sans-serif;
             text-decoration: none;
         }
 
-        .main-content {
-            flex: 1;
+        .main {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left {
+            background-color: #1A76D1;
+            width: 17%;
             padding: 20px;
+            position: fixed;
+            height: 100vh;
         }
 
-        .content-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .appointment-form {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #444;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .submit-btn {
-            background-color: #2196F3;
+        .logo h1 {
             color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            font-size: 35px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .logo span {
+            color: black;
+        }
+
+        .menu-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            display: block;
             font-size: 16px;
         }
 
-        .submit-btn:hover {
-            background-color: #1976D2;
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .right {
+            flex: 1;
+            padding: 20px;
+            margin-left: 270px;
+            background: #f0f2f5;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-container {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
         }
 
         th {
-            background-color: #2196F3;
+            background-color: #1A76D1;
             color: white;
-            padding: 12px;
-            text-align: left;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            cursor: pointer;
-            margin: 0 4px;
-        }
-
-        .edit-btn {
-            background-color: #4CAF50;
         }
 
         .delete-btn {
-            background-color: #f44336;
-        }
-
-        .status-pending {
-            background-color: #FFC107;
-            color: black;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .status-confirmed {
-            background-color: #4CAF50;
+            background: #e74c3c;
             color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: white;
+            padding: 6px 12px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
         }
 
-        @media screen and (max-width: 768px) {
-            body {
+        @media (max-width: 1024px) {
+            .main {
                 flex-direction: column;
             }
 
-            .sidebar {
+            .left {
                 width: 100%;
-                padding: 10px;
+                height: auto;
+                position: relative;
+                padding: 0;
             }
 
-            .main-content {
-                padding: 10px;
+            .right {
+                margin-left: 0;
             }
 
-            table {
-                display: block;
+            .menu-item {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
                 overflow-x: auto;
             }
 
-            td, th {
-                min-width: 120px;
+            .delete-btn {
+                padding: 5px 10px;
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <?php
-    // Database connection
-    $servername = "localhost";
-    $username = "your_username";
-    $password = "your_password";
-    $dbname = "your_database";
-
-    $conn = mysqli_connect("localhost","root","","care");
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Handle form submission
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-        $patient_name = $_POST['patient_name'];
-        $doctor_name = $_POST['doctor_name'];
-        $appointment_date = $_POST['appointment_date'];
-        $appointment_time = $_POST['appointment_time'];
-        $reason = $_POST['reason'];
-
-        $sql = "INSERT INTO appointments (patient_name, doctor_name, appointment_date, appointment_time, reason)
-                VALUES (?, ?, ?, ?, ?)";
-        
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $patient_name, $doctor_name, $appointment_date, $appointment_time, $reason);
-        
-        if ($stmt->execute()) {
-            echo "<script>alert('Appointment scheduled successfully!');</script>";
-        } else {
-            echo "<script>alert('Error scheduling appointment.');</script>";
-        }
-    }
-
-    // Fetch appointments
-    $sql = "SELECT * FROM appointments ORDER BY date, time";
-    $result = $conn->query($sql);
-    ?>
-
-    <div class="sidebar">
-        <div class="logo">CARE</div>
-        <div class="menu-item">Dashboard</div>
-        <div class="menu-item">Appointments</div>
-        <div class="menu-item">Patients</div>
-        <div class="menu-item">Doctors</div>
-    </div>
-
-    <div class="main-content">
-        <div class="tab-buttons">
-            <button class="tab-btn">Schedule Appointment</button>
-            <button class="tab-btn">View Appointments</button>
+    <div class="main">
+        <div class="left">
+            <div class="logo">
+                <h1>CA<span>RE</span></h1>
+            </div>
+            <div class="menu-item">
+                <a href="admin.php">Dashboard</a>
+            </div>
+            <div class="menu-item">
+                <a href="doctorReqAdmin.php">Doctor Requests</a>
+            </div>
+            <div class="menu-item">
+                <a href="DoctorDB.php">Doctors</a>
+            </div>
+            <div class="menu-item">
+                <a href="patientdb.php">Patients</a>
+            </div>
+            <div class="menu-item">
+                <a href="appointmentdb.php">Appointments</a>
+            </div>
         </div>
 
-        <div class="content-card">
-            <h2>Schedule New Appointment</h2>
-            <form class="appointment-form" method="POST">
-                <div class="form-group">
-                    <label for="patient_name">Patient Name</label>
-                    <input type="text" id="patient_name" name="patient_name" required>
+        <div class="right">
+            <div class="content-area">
+                <h2>Appointments List</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Department</th>
+                                <th>Doctor</th>
+                                <th>Date</th>
+                                <th>Message</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM appointments";
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>
+                                            <td>" . htmlspecialchars($row["id"]) . "</td>
+                                            <td>" . htmlspecialchars($row["name"]) . "</td>
+                                            <td>" . htmlspecialchars($row["email"]) . "</td>
+                                            <td>" . htmlspecialchars($row["phone"]) . "</td>
+                                            <td>" . htmlspecialchars($row["department"]) . "</td>
+                                            <td>" . htmlspecialchars($row["doctor"]) . "</td>
+                                            <td>" . htmlspecialchars($row["date"]) . "</td>
+                                            <td>" . htmlspecialchars($row["message"]) . "</td>
+                                            <td><div class='action-buttons'>
+                                            <a href='?delete_id=" . $row['id'] . "' class='action-btn delete-btn' onclick='return confirm(\"Are you sure?\")'>Delete</a>
+                                        </div></td>
+                                          </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='9' style='text-align: center;'>No appointments found</td></tr>";
+                            }
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="form-group">
-                    <label for="doctor_name">Doctor Name</label>
-                    <select id="doctor_name" name="doctor_name" required>
-                        <?php
-                        // Fetch doctors from database
-                        $doctor_sql = "SELECT name FROM doctors";
-                        $doctor_result = $conn->query($doctor_sql);
-                        while($row = $doctor_result->fetch_assoc()) {
-                            echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="appointment_date">Appointment Date</label>
-                    <input type="date" id="appointment_date" name="appointment_date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="appointment_time">Appointment Time</label>
-                    <input type="time" id="appointment_time" name="appointment_time" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="reason">Reason for Visit</label>
-                    <textarea id="reason" name="reason" required></textarea>
-                </div>
-
-                <button type="submit" name="submit" class="submit-btn">Schedule Appointment</button>
-            </form>
-        </div>
-
-        <div class="content-card">
-            <h2>Upcoming Appointments</h2>
-            <table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Department</th>
-            <th>Doctor</th>
-            <th>Date</th>
-            <th>Message</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        // SQL query to fetch appointments
-        $sql = "SELECT * FROM appointments ORDER BY date ASC";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-                echo "<td>" . $row["phone"] . "</td>";
-                echo "<td>" . $row["department"] . "</td>";
-                echo "<td>" . $row["doctor"] . "</td>";
-                echo "<td>" . $row["date"] . "</td>";
-                echo "<td>" . $row["message"] . "</td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='7'>No appointments found</td></tr>";
-        }
-        ?>
-    </tbody>
-</table>
-
+            </div>
         </div>
     </div>
-
-    <?php
-    $conn->close();
-    ?>
 </body>
 </html>

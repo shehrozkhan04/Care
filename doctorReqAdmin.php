@@ -18,7 +18,7 @@ if (isset($_GET['delete_id'])) {
     $deleteId = $_GET['delete_id'];
     $deleteQuery = "DELETE FROM doctor WHERE id = $deleteId";
     mysqli_query($conn, $deleteQuery);
-    header("Location: doctorReqAdmin.php");
+    header("Location: " . $_SERVER['PHP_SELF']); // Refresh page after update
     exit;
 }
 
@@ -27,9 +27,10 @@ if (isset($_GET['accept_id'])) {
     $acceptId = $_GET['accept_id'];
     $acceptQuery = "UPDATE doctor SET status='accepted' WHERE id = $acceptId";
     mysqli_query($conn, $acceptQuery);
-    header("Location: alldoc.php");
+    header("Location: " . $_SERVER['PHP_SELF']); // Refresh page after update
     exit;
 }
+
 
 $sql = "SELECT * FROM doctor ORDER BY id DESC";
 $result = mysqli_query($conn, $sql);
@@ -43,15 +44,13 @@ $result = mysqli_query($conn, $sql);
     <title>Doctor Requests</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-         * {
+        * {
             margin: 0;
             padding: 0;
             font-family: "Poppins", sans-serif;
+            text-decoration: none;
         }
-        body{
-            width: 100%;
-            overflow: hidden;
-        }
+
         .main {
             display: flex;
             min-height: 100vh;
@@ -59,7 +58,59 @@ $result = mysqli_query($conn, $sql);
 
         .left {
             background-color: #1A76D1;
-            width: 25%;
+            width: 17%;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        .logo span {
+            color: black;
+        }
+
+        .menu-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .right {
+            flex: 1;
+            padding: 20px;
+            margin-left: 270px;
+            background: #f0f2f5;
+        }
+
+        .content-area {
+            width: 96%;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .left {
+            background-color: #1A76D1;
+            width: 17%;
             padding: 20px;
         }
 
@@ -89,7 +140,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .right {
-            width: 75%;
+            width: 82%;
             padding: 20px;
             background: #f0f2f5;
         }
@@ -163,6 +214,22 @@ $result = mysqli_query($conn, $sql);
             background: #95a5a6;
             cursor: default;
         }
+        @media (max-width: 1024px) {
+            .main {
+                flex-direction: column;
+            }
+
+            .left {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 0;
+            }
+
+            .right {
+                margin-left: 0;
+            }
+        }
 
         @media (max-width: 768px) {
             .main {
@@ -203,18 +270,26 @@ $result = mysqli_query($conn, $sql);
 </head>
 <body>
 <div class="main">
-        <div class="left">
+<div class="left">
             <div class="logo">
                 <h1>CA<span>RE</span></h1>
             </div>
             <div class="menu-item">
+                <a href="admin.php">Dashboard</a>
+            </div>
+            <div class="menu-item active-menu">
                 <a href="doctorReqAdmin.php">Doctor Requests</a>
             </div>
             <div class="menu-item">
-                <a href="DoctorDB.php">Accepted Doctors</a>
+                <a href="DoctorDB.php">Doctors</a>
+            </div>
+            <div class="menu-item">
+                <a href="patientdb.php">Patients</a>
+            </div>
+            <div class="menu-item">
+                <a href="appointmentdb.php">Appointments</a>
             </div>
         </div>
-        
         <div class="right">
             <div class="content-area">
                 <div class="content-header">

@@ -46,94 +46,94 @@ $result = mysqli_query($conn, $sql);
     <title>Doctor Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: "Poppins", sans-serif;
-        }
+      * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
 
-        .main {
-            display: flex;
-            min-height: 100vh;
-        }
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    flex-direction: column;
+}
 
-        .left {
-            background-color: #1A76D1;
-            width: 250px;
-            padding: 20px;
-        }
+.left {
+    background-color: #1A76D1;
+    width: 17%;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
 
-        .logo h1 {
-            color: white;
-            font-size: 35px;
-            margin-bottom: 30px;
-        }
-
-        .logo span {
+.logo h1 {
+    color: white;
+    font-size: 35px;
+    margin-bottom: 35px;
+    text-align: center;
+}
+.logo span {
             color: black;
         }
 
-        .menu-item {
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 8px;
-        }
-
-        .menu-item a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .right {
-            flex: 1;
-            padding: 20px;
-            background: #f0f2f5;
-        }
-
-        .content-area {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(210, 22, 22, 0.05);
-        }
-
-        .content-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .content-header h2 {
-            font-size: 24px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background-color: #1A76D1;
-            color: white;
-        }
-
-      /* Action buttons container to place buttons on the same line */
-.action-buttons {
-    display: flex;  /* Align the buttons side by side */
-    gap: 10px;      /* Space between buttons */
+.menu-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-/* Style the individual buttons */
+.menu-item a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.right {
+    flex: 1;
+    width: 83%;
+    padding: 20px;
+    margin-left: 17%;
+    background: #f0f2f5;
+    overflow-x: auto;
+}
+
+.content-area {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #1A76D1;
+    color: white;
+}
+
 .action-btn {
     padding: 6px 12px;
     border: none;
@@ -144,14 +144,17 @@ $result = mysqli_query($conn, $sql);
 }
 
 .edit-btn {
-    background: #2ecc71;  /* Green for Edit */
+    background: #2ecc71;
 }
 
 .delete-btn {
-    background: #e74c3c;  /* Red for Delete */
+    background: #e74c3c;
 }
 
-
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
         /* Modal Styles */
         #editModal {
             display: none;
@@ -216,19 +219,128 @@ $result = mysqli_query($conn, $sql);
         .cancel-btn {
             background: #ddd;
         }
+
+@media (max-width: 1024px) {
+    .left {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+
+    .right {
+        margin-left: 0;
+        width: 100%;
+        padding: 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .logo h1 {
+        font-size: 28px;
+    }
+
+    .menu-item a {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    .left {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+    }
+
+    .menu-item {
+        padding: 12px;
+        margin: 8px 0;
+    }
+
+    .logo h1 {
+        font-size: 26px;
+    }
+
+    .menu-item a {
+        font-size: 14px;
+    }
+
+    .right {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .content-area {
+        padding: 15px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 22px;
+    }
+
+    .menu-item a {
+        font-size: 12px;
+    }
+
+    .action-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .content-area {
+        padding: 10px;
+    }
+}
+
     </style>
 </head>
 <body>
+    <div class="main">
     <div class="main">
         <div class="left">
             <div class="logo">
                 <h1>CA<span>RE</span></h1>
             </div>
             <div class="menu-item">
+                <a href="admin.php">Dashboard</a>
+            </div>
+            <div class="menu-item">
                 <a href="doctorReqAdmin.php">Doctor Requests</a>
             </div>
             <div class="menu-item">
-                <a href="DoctorDB.php">Accepted Doctors</a>
+                <a href="DoctorDB.php">Doctors</a>
+            </div>
+            <div class="menu-item">
+                <a href="patientdb.php">Patients</a>
+            </div>
+            <div class="menu-item">
+                <a href="appointmentdb.php">Appointments</a>
             </div>
         </div>
         <div class="right">

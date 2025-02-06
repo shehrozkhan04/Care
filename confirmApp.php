@@ -1,3 +1,49 @@
+<?php
+$conn = mysqli_connect("localhost", "root", "", "care");
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Create table if not exists
+$tableQuery = "CREATE TABLE IF NOT EXISTS appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    department VARCHAR(255) NOT NULL,
+    doctor VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+$conn->query($tableQuery);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $department = $_POST['department'];
+    $doctor = $_POST['doctor'];
+    $date = $_POST['date'];
+    $message = $_POST['message'];
+
+    // Prepare SQL statement
+    $stmt = $conn->prepare("INSERT INTO appointments (name, email, phone, department, doctor, date, message) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $name, $email, $phone, $department, $doctor, $date, $message);
+
+    if ($stmt->execute()) {
+        header("Location: appointmentDone.php");
+        exit();
+    } else {
+        echo "<script>alert('Error: " . $stmt->error . "');</script>";
+    }
+
+    $stmt->close();
+}
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -156,8 +202,8 @@ $specialty = isset($_GET['specialty']) ? $_GET['specialty'] : '';
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-12 col-12">
-                <form class="form" action="#" onsubmit="return validateForm()">
-                    <div class="row">
+            <form class="form" action="confirmApp.php" onsubmit="return validateForm()" method="post">
+            <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
                                 <input name="name" id="name" type="text" placeholder="Name">
@@ -193,7 +239,7 @@ $specialty = isset($_GET['specialty']) ? $_GET['specialty'] : '';
                         </div>
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="form-group">
-                                <input type="text" placeholder="Date" id="datepicker">
+                                <input type="text" placeholder="Date" id="datepicker" name="date">
                                 <span class="error" id="dateError"></span>
                             </div>
                         </div>
@@ -208,7 +254,7 @@ $specialty = isset($_GET['specialty']) ? $_GET['specialty'] : '';
                         <div class="col-lg-5 col-md-4 col-12">
                             <div class="form-group">
                                 <div class="button">
-                                    <button type="submit" class="btn">Book An Appointment</button>
+                                    <button type="submit" name="submit"class="btn">Book An Appointment</button>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +262,7 @@ $specialty = isset($_GET['specialty']) ? $_GET['specialty'] : '';
                             <p>( We will confirm by a Text Message )</p>
                         </div>
                     </div>
-                </form>
+                </>
             </div>
             <div class="col-lg-6 col-md-12">
                 <div class="appointment-image">
@@ -295,12 +341,7 @@ $specialty = isset($_GET['specialty']) ? $_GET['specialty'] : '';
                             <h2>Newsletter</h2>
                             <p>Subscribe to our newsletter to receive updates, medical news, and tips directly in your
                                 inbox.</p>
-                            <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
-                                <input name="email" placeholder="Email Address" class="common-input"
-                                    onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'"
-                                    required="" type="email">
-                                <button class="button"><i class="icofont icofont-paper-plane"></i></button>
-                            </form>
+                           
                         </div>
                     </div>
                 </div>

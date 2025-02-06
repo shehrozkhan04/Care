@@ -13,7 +13,7 @@ if (isset($_POST['submit'])) {
     $gender = $_POST['gender'];
     $medical_history = $_POST['medical_history'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Secure password hashing
+    $password = ($_POST['password']); // Secure password hashing
     $medical_reports = $_FILES['medical_reports']['name'];
 
     // File upload validation

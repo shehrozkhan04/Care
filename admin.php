@@ -24,6 +24,7 @@ $requestCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count
             margin: 0;
             padding: 0;
             font-family: "Poppins", sans-serif;
+            text-decoration: none;
         }
 
         .main {
@@ -140,6 +141,74 @@ $requestCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count
         .requests-box::before {
             content: "📫";
         }
+        /* Existing CSS remains the same */
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .left {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 0;
+    }
+    .content-area{
+        padding: 10px;
+    }
+
+    .right {
+        margin-left: 0;
+       
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr; /* Stack stats in a single column */
+    }
+
+    .menu-item {
+        text-align: center;
+    }
+
+    .logo h1 {
+        text-align: center;
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .stat-box {
+        padding: 15px;
+    }
+
+    .stat-box h3 {
+        font-size: 20px;
+    }
+
+    .stat-box p {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 24px;
+    }
+
+    .menu-item a {
+        font-size: 14px;
+    }
+
+    .stat-box h3 {
+        font-size: 18px;
+    }
+
+    .stat-box p {
+        font-size: 20px;
+    }
+}
     </style>
 </head>
 <body>
@@ -149,13 +218,19 @@ $requestCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count
                 <h1>CA<span>RE</span></h1>
             </div>
             <div class="menu-item active-menu">
-                <a href="dashboard.php">Dashboard</a>
+                <a href="admin.php">Dashboard</a>
             </div>
             <div class="menu-item">
                 <a href="doctorReqAdmin.php">Doctor Requests</a>
             </div>
             <div class="menu-item">
-                <a href="DoctorDB.php">Accepted Doctors</a>
+                <a href="DoctorDB.php">Doctors</a>
+            </div>
+            <div class="menu-item">
+                <a href="patientdb.php">Patients</a>
+            </div>
+            <div class="menu-item">
+                <a href="appointmentdb.php">Appointments</a>
             </div>
         </div>
         <div class="right">
@@ -164,22 +239,30 @@ $requestCount = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as count
                 <!-- Add more content here -->
             </div>
             <div class="stats-container">
+               <a href="doctorDB.php"> 
                 <div class="stat-box doctors-box">
                     <h3>Total Doctors</h3>
                     <p><?php echo $doctorCount; ?></p>
                 </div>
+            </a>
+                <a href="patientdb.php">
                 <div class="stat-box patients-box">
                     <h3>Total Patients</h3>
                     <p><?php echo $patientCount; ?></p>
                 </div>
-                <div class="stat-box appointments-box">
+                </a>
+              <a href="appointmentdb.php">
+              <div class="stat-box appointments-box">
                     <h3>Appointments</h3>
                     <p><?php echo $appointmentCount; ?></p>
                 </div>
+              </a>
+                <a href="doctorReqAdmin.php">
                 <div class="stat-box requests-box">
                     <h3>Pending Requests</h3>
                     <p><?php echo $requestCount; ?></p>
                 </div>
+                </a>
             </div>
         </div>
     </div>

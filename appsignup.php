@@ -1,34 +1,4 @@
-
-<?php
-// Database connection
-$conn = mysqli_connect("localhost", "root", "", "care");
-
-
-// Search functionality for department
-$searchQuery = '';
-if (isset($_GET['search']) && !empty($_GET['search'])) {
-    $search = mysqli_real_escape_string($conn, $_GET['search']);
-    $searchQuery = "WHERE status = 'accepted' AND department LIKE '%$search%'";
-} else {
-    $searchQuery = "WHERE status = 'accepted'"; // Default query if no search term is entered
-}
-
-
-// Basic query to fetch all accepted doctors with department filter
-$query = "SELECT * FROM doctor $searchQuery";
-$result = mysqli_query($conn, $query);
-?>
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Fetch doctors from Lahore who are accepted
-$query = "SELECT * FROM doctor WHERE status = 'accepted' AND city = 'Lahore'";
-$result = mysqli_query($conn, $query);
-?>
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -74,54 +44,24 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/responsive.css">
-    
     <style>
-           .doctor-main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0px;
-        }
-        .d-card1 {
-            width: 250px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 15px;
-            transition: 0.2s ease-in-out;
-        }
-        .d-card1:hover {
-            box-shadow: 0 0 16px rgba(0, 0, 0, 0.15);
-            background-color: #fff;
-            text-decoration: none;
-        }
-        .d-card1 img {
+        .main{
             width: 100%;
-            height: 180px;
+            height: auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .main a{
+           padding: 15px 20px;
+            color: white;
+            background-color: #1A76D1 ;
             border-radius: 10px;
-            object-fit: cover;
         }
-        .c-text {
-            padding: 10px 0;
-        }
-        .c-text h1 {
-            font-size: 1.5rem;
-            margin: 5px 0;
-            color: #000;
-        }
-        .c-text h5 {
-            margin-top: 20px;
-            font-size: 1rem;
-            color: #28a745;
-        }
-        .c-text h6 {
-            font-size: 1rem;
-            color: #000;
-        }
-        .c-text p {
-            color: #000;
-            font-size: 1.1rem;
+        .main a:hover{
+            background-color:rgb(13, 41, 69);
         }
     </style>
 </head>
@@ -129,7 +69,7 @@ $result = mysqli_query($conn, $query);
 <body>
 
     <!-- Preloader -->
-    <!-- <div class="preloader">
+    <div class="preloader">
         <div class="loader">
             <div class="loader-outter"></div>
             <div class="loader-inner"></div>
@@ -141,7 +81,7 @@ $result = mysqli_query($conn, $query);
                 </svg>
             </div>
         </div>
-    </div> -->
+    </div>
     <!-- End Preloader -->
 
     <!-- Header Area -->
@@ -205,22 +145,12 @@ $result = mysqli_query($conn, $query);
                             </div>
                             <!--/ End Main Menu -->
                         </div>
-                        <div class="col-lg-2 col-12"
-                            style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-                            <!-- Search input field -->
-                            <form method="GET" action="" style="display: flex; align-items: center; width: 100%;">
-                                <input
-                                    style="border-radius: 30px; padding-left: 20px; font-size: 12px; flex-grow: 1; height: 40px;"
-                                    type="search" name="search" id="search" placeholder="Search.."
-                                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                                <button
-                                    style="background-color: transparent; border: none; padding: 0; margin-left: 10px; cursor: pointer;">
-                                    <i class="ri-search-line" style="font-size: 1.7vw;"></i>
-                                </button>
-                            </form>
+                        <div class="col-lg-2 col-12">
+								<div class="get-quote">
+									<a href="appsignup.php" class="btn">Book Appointment</a>
+								</div>
+							</div>
                         </div>
-
-    
                     </div>
                 </div>
             </div>
@@ -229,37 +159,27 @@ $result = mysqli_query($conn, $query);
     </header>
     <!-- End Header Area -->
 
-    <div class="container">
-        <h1 class="text-center mt-5">Doctors in Lahore</h1>
-        <div class="doctor-main">
-            <?php
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $doctor_name = htmlspecialchars($row['name']);
-                    $doctor_department = htmlspecialchars($row['department']);
-                    $doctor_picture = htmlspecialchars($row['picture']);
-                    $doctor_timing = htmlspecialchars($row['time']);
-            ?>
-                    <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_department); ?>" class="d-card1">
-                        <img src="doctorImage/<?php echo $doctor_picture; ?>" alt="<?php echo $doctor_name; ?>">
-                        <div class="c-text">
-                            <h1><?php echo $doctor_name; ?></h1>
-                            <h6><?php echo $doctor_department; ?></h6>
-                            <h5>Timings: <?php echo $doctor_timing; ?></h5>
-                            <p>City: <?php echo htmlspecialchars($row['city']); ?></p>
-                        </div>
-                    </a>
-            <?php
-                }
-            } else {
-                echo "<p class='text-center'>No doctors available in Lahore at the moment.</p>";
-            }
-            ?>
-        </div>
+    <div class="main">
+        <h2>Before Book Your Appointment Please Signup!!</h2><br>
+        <a href="patientsignup.php">Sign Up</a><br>
+        <h2>If You're Already Sign Up So Continue To Book Your Appointment</h2><br>
+        <a href="appointment.php">Book Appointment</a>
+
     </div>
 
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
 
 					<!-- Footer Area -->
 <footer id="footer" class="footer">

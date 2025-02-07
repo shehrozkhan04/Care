@@ -301,7 +301,7 @@ $result = mysqli_query($conn, $sql);
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Specialization</th>
+                                <th>department</th>
                                 <th>Experience</th>
                                 <th>Picture</th>
                                 <th>Email</th>
@@ -319,7 +319,7 @@ $result = mysqli_query($conn, $sql);
                                     <tr>
                                         <td><?php echo htmlspecialchars($row['id']); ?></td>
                                         <td><?php echo htmlspecialchars($row['name']); ?></td>
-                                        <td><?php echo htmlspecialchars($row['specialization']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['department']); ?></td>
                                         <td><?php echo htmlspecialchars($row['experience']); ?></td>
                                         <td>
                                             <img src="doctorImage/<?php echo htmlspecialchars($row['picture']); ?>" 

@@ -2,17 +2,17 @@
 // Database connection
 $conn = mysqli_connect("localhost", "root", "", "care");
 
-// Search functionality for specialization
+// Search functionality for department
 $searchQuery = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = mysqli_real_escape_string($conn, $_GET['search']);
-    $searchQuery = "WHERE status = 'accepted' AND specialization LIKE '%$search%'";
+    $searchQuery = "WHERE status = 'accepted' AND department LIKE '%$search%'";
 } else {
     $searchQuery = "WHERE status = 'accepted'"; // Default query if no search term is entered
 }
 
 
-// Basic query to fetch all accepted doctors with specialization filter
+// Basic query to fetch all accepted doctors with department filter
 $query = "SELECT * FROM doctor $searchQuery";
 $result = mysqli_query($conn, $query);
 ?>
@@ -470,19 +470,19 @@ $result = mysqli_query($conn, $query);
             while ($row = mysqli_fetch_assoc($result)) {
                 // Fetching doctor details including timings
                 $doctor_name = htmlspecialchars($row['name']);
-                $doctor_specialization = htmlspecialchars($row['specialization']);
+                $doctor_department = htmlspecialchars($row['department']);
                 $doctor_picture = htmlspecialchars($row['picture']);
                 $doctor_city = htmlspecialchars($row['city']);
                 $doctor_timing = htmlspecialchars($row['time']);
                 ?>
-                <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_specialization); ?>"
+                <a href="confirmApp.php?doctor=<?php echo urlencode($doctor_name); ?>&specialty=<?php echo urlencode($doctor_department); ?>"
                     class="d-card1">
                     <div class="c-img">
                         <img src="doctorImage/<?php echo $doctor_picture; ?>" alt="<?php echo $doctor_name; ?>">
                     </div>
                     <div class="c-text">
                         <h1><?php echo $doctor_name; ?></h1>
-                        <h6><?php echo $doctor_specialization; ?></h6>
+                        <h6><?php echo $doctor_department; ?></h6>
                         <p>Timings: <?php echo $doctor_timing; ?></p>
                         <h6><?php echo $doctor_city; ?></h6>
                     </div>

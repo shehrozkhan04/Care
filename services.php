@@ -127,7 +127,7 @@
                         </div>
                         <div class="col-lg-2 col-12">
 								<div class="get-quote">
-									<a href="appointment.php" class="btn">Book Appointment</a>
+									<a href="appsignup.php" class="btn">Book Appointment</a>
 								</div>
 							</div>
                     </div>
@@ -261,7 +261,7 @@
                             </li>
                         </ul>
                         <div class="table-bottom">
-                            <a class="btn" href="appointment.php">Book Now</a>
+                            <a class="btn" href="appsignup.php">Book Now</a>
                         </div>
                         <!-- Table Bottom -->
                     </div>
@@ -294,7 +294,7 @@
                             </li>
                         </ul>
                         <div class="table-bottom">
-                            <a class="btn" href="appointment.php">Book Now</a>
+                            <a class="btn" href="appsignup.php">Book Now</a>
                         </div>
                         <!-- Table Bottom -->
                     </div>
@@ -326,7 +326,7 @@
                                 and fast services acc to your needs.</li>
                         </ul>
                         <div class="table-bottom">
-                            <a class="btn" href="appointment.php">Book Now</a>
+                            <a class="btn" href="appsignup.php">Book Now</a>
                         </div>
                         <!-- Table Bottom -->
                     </div>

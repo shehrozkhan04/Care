@@ -127,7 +127,7 @@
                         </div>
                         <div class="col-lg-2 col-12">
 								<div class="get-quote">
-									<a href="appointment.php" class="btn">Book Appointment</a>
+									<a href="appsignup.php" class="btn">Book Appointment</a>
 								</div>
 							</div>
                     </div>
@@ -153,7 +153,7 @@
 								<p>Care: Where Compassion Meets Excellence in Healthcare, Every Step of the Way,
 									Ensuring Trust, Comfort, Healing, and a Brighter Tomorrow for All.</p>
 								<div class="button">
-									<a href="appointment.php" class="btn">Get Appointment</a>
+									<a href="appsignup.php" class="btn">Get Appointment</a>
 									<a href="services.php" class="btn primary">Services</a>
 								</div>
 							</div>
@@ -172,7 +172,7 @@
 								<p>Your Health, Our Priority – Experience Exceptional Care with Us, Today and Always,
 									Delivering Comfort, Trust, Healing, and a Future Full of Wellness. </p>
 								<div class="button">
-									<a href="appointment.php" class="btn">Get Appointment</a>
+									<a href="appsignup.php" class="btn">Get Appointment</a>
 									<a href="about.php" class="btn primary">About Us</a>
 								</div>
 							</div>
@@ -191,7 +191,7 @@
 								<p>Care: Redefining Trust and Comfort in Every Healing Touch, For Every Heart, With
 									Compassion, Excellence, Dedication, and a Promise for Better Health. </p>
 								<div class="button">
-									<a href="appointment.php" class="btn">Get Appointment</a>
+									<a href="appsignup.php" class="btn">Get Appointment</a>
 									<a href="contact.php" class="btn primary">Contact Now</a>
 								</div>
 							</div>

@@ -7,11 +7,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $id = $_POST['id'];
     $name = $_POST['name'];
-    $specialization = $_POST['specialization'];
+    $department = $_POST['department'];
     $experience = $_POST['experience'];
     $bio = $_POST['bio'];
 
-    $query = "UPDATE doctor SET name='$name', specialization='$specialization', experience='$experience', bio='$bio' WHERE id=$id";
+    $query = "UPDATE doctor SET name='$name', department='$department', experience='$experience', bio='$bio' WHERE id=$id";
     
     if (mysqli_query($conn, $query)) {
         header("Location: alldoc.php");
@@ -353,7 +353,7 @@ th {
         <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Specialization</th>
+            <th>department</th>
             <th>Experience</th>
             <th>Time</th> <!-- New column for time -->
             <th>City</th> <!-- New column for city -->
@@ -369,7 +369,7 @@ th {
             <tr>
                 <td><?php echo htmlspecialchars($row['id']); ?></td>
                 <td><?php echo htmlspecialchars($row['name']); ?></td>
-                <td><?php echo htmlspecialchars($row['specialization']); ?></td>
+                <td><?php echo htmlspecialchars($row['department']); ?></td>
                 <td><?php echo htmlspecialchars($row['experience']); ?></td>
                 <td><?php echo htmlspecialchars($row['time']); ?></td> <!-- Displaying time -->
                 <td><?php echo htmlspecialchars($row['city']); ?></td> <!-- Displaying city -->
@@ -407,8 +407,8 @@ th {
                     <input type="text" name="name" id="doctorName">
                 </div>
                 <div class="form-group">
-                    <label for="doctorSpecialization">Specialization:</label>
-                    <input type="text" name="specialization" id="doctorSpecialization">
+                    <label for="doctordepartment">department:</label>
+                    <input type="text" name="department" id="doctordepartment">
                 </div>
                 <div class="form-group">
                     <label for="doctorExperience">Experience:</label>
@@ -431,7 +431,7 @@ th {
             document.getElementById('editModal').style.display = 'flex';
             document.getElementById('doctorId').value = doctor.id;
             document.getElementById('doctorName').value = doctor.name;
-            document.getElementById('doctorSpecialization').value = doctor.specialization;
+            document.getElementById('doctordepartment').value = doctor.department;
             document.getElementById('doctorExperience').value = doctor.experience;
             document.getElementById('doctorBio').value = doctor.bio;
         }
